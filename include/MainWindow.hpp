@@ -22,11 +22,14 @@ namespace ui {
     public:
       MainWindow(QWidget *parent = nullptr);
       virtual ~MainWindow() {
+        delete _menuBar;
+        delete _fileMenu;
+        delete _openAction;
+        delete _saveAction;
+        delete _exitAction;
+
         delete _textEdit;
       };
-
-    private slots:
-      void sayHello();
 
     private:
       void setupUi();
@@ -39,6 +42,10 @@ namespace ui {
 
       QTextEdit *_textEdit;
       QMenuBar *_menuBar;
+      QMenu *_fileMenu;
+      QAction *_openAction;
+      QAction *_saveAction;
+      QAction *_exitAction;
 
   };
 }

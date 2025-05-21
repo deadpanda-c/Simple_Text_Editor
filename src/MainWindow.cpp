@@ -1,6 +1,5 @@
 #include "MainWindow.hpp"
 
-
 ui::MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
@@ -31,42 +30,28 @@ void ui::MainWindow::setupActions()
 }
 
 void ui::MainWindow::setupMenuBar()
-{ 
-  QMenu *fileMenu = new QMenu("File", this);
-  QAction *openAction = new QAction("Open", this);
-  QAction *saveAction = new QAction("Save", this);
-  QAction *exitAction = new QAction("Exit", this);
-  Logging::Log("MainWindow: Menu bar actions initialized.");
+{
+  _fileMenu = new QMenu("File", this);
+  _openAction = new QAction("Open", this);
+  _saveAction = new QAction("Save", this);
+  _exitAction = new QAction("Exit", this);
 
-  connect(openAction, &QAction::triggered, this, &MainWindow::fileOpen);
-  Logging::Log("MainWindow: Open action connected.");
-  connect(saveAction, &QAction::triggered, this, &MainWindow::fileSave);
-  Logging::Log("MainWindow: Save action connected.");
-  connect(exitAction, &QAction::triggered, this, &QWidget::close);
-  Logging::Log("MainWindow: Exit action connected.");
+  connect(_openAction, &QAction::triggered, this, &MainWindow::fileOpen);
+  connect(_saveAction, &QAction::triggered, this, &MainWindow::fileSave);
+  connect(_exitAction, &QAction::triggered, this, &QWidget::close);
 
-  fileMenu->addAction(openAction);
-  Logging::Log("MainWindow: Open action added to menu.");
-  fileMenu->addAction(saveAction);
-  Logging::Log("MainWindow: Save action added to menu.");
-  fileMenu->addSeparator();
-  Logging::Log("MainWindow: Separator added to menu.");
-  fileMenu->addAction(exitAction);
-  Logging::Log("MainWindow: Exit action added to menu.");
+  _fileMenu->addAction(_openAction);
+  _fileMenu->addAction(_saveAction);
+  _fileMenu->addSeparator();
+  _fileMenu->addAction(_exitAction);
 
-
-  _menuBar->addMenu(fileMenu);
+  _menuBar->addMenu(_fileMenu);
   Logging::Log("MainWindow: Menu bar initialized.");
 }
 
 void ui::MainWindow::setupToolBar()
 {
   Logging::Log("MainWindow: Tool bar initialized.");
-}
-
-void ui::MainWindow::sayHello()
-{
-    std::cout << "Hello, World!" << std::endl;
 }
 
 void ui::MainWindow::fileOpen()
@@ -78,6 +63,7 @@ void ui::MainWindow::fileOpen()
       QTextStream stream(&file);
       _textEdit->setPlainText(stream.readAll());
       file.close();
+      Logging::Log("MainWindow: File opened successfully.");
     }
   }
 }
@@ -91,6 +77,7 @@ void ui::MainWindow::fileSave()
       QTextStream stream(&file);
       stream << _textEdit->toPlainText();
       file.close();
+      Logging::Log("MainWindow: File saved successfully.");
     }
   }
 }
