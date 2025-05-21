@@ -8,12 +8,16 @@
 #include <QVBoxLayout>
 #include <QTextEdit>
 
+#include "Logging.hpp"
+
 namespace ui {
   class MainWindow : public QWidget
   {
     public:
       MainWindow(QWidget *parent = nullptr);
-      virtual ~MainWindow() {};
+      virtual ~MainWindow() {
+        delete _textEdit;
+      };
 
     private slots:
       void sayHello();

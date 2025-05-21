@@ -21,21 +21,22 @@ void ui::MainWindow::setupUi()
 {
     setWindowTitle("Text Editor");
     resize(800, 600);
+    Logging::Log("MainWindow: Graphical user interface initialized.");
 }
 
 void ui::MainWindow::setupActions()
 {
-    std::cout << "Setting up actions..." << std::endl;
+    Logging::Log("MainWindow: Actions initialized.");
 }
 
 void ui::MainWindow::setupMenuBar()
 {
-    std::cout << "Setting up menu bar..." << std::endl;
+  Logging::Log("MainWindow: Menu bar initialized.");
 }
 
 void ui::MainWindow::setupToolBar()
 {
-    std::cout << "Setting up toolbar..." << std::endl;
+  Logging::Log("MainWindow: Tool bar initialized.");
 }
 
 void ui::MainWindow::sayHello()
