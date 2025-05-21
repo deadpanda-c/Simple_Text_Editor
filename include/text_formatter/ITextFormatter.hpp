@@ -3,8 +3,10 @@
 #include <iostream>
 #include <string>
 
+#include <QString>
+
 class ITextFormatter {
   public:
-    virtual std::string format(const std::string &text) = 0;
+    virtual QString format(QString text) = 0;
     virtual ~ITextFormatter() = default;
 };
