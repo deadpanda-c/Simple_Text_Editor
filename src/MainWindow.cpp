@@ -26,7 +26,24 @@ void ui::MainWindow::setupUi()
 
 void ui::MainWindow::setupActions()
 {
-    Logging::Log("MainWindow: Actions initialized.");
+  _boldAction = new QAction("Bold", this);
+  _italicAction = new QAction("Italic", this);
+  _underlineAction = new QAction("Underline", this);
+
+  // add shortcuts
+  _boldAction->setShortcut(QKeySequence("Ctrl+B"));
+  _italicAction->setShortcut(QKeySequence("Ctrl+I"));
+  _underlineAction->setShortcut(QKeySequence("Ctrl+U"));
+
+  connect(_boldAction, &QAction::triggered, this, &MainWindow::applyBoldFormatter);
+
+  connect(_italicAction, &QAction::triggered, this, &MainWindow::applyItalicFormatter);
+  // connect(_underlineAction, &QAction::triggered, this, &MainWindow::applyUnderlineFormatter);
+
+  // Add actions to the menu bare
+  _menuBar->addAction(_boldAction);
+  _menuBar->addAction(_italicAction);
+  Logging::Log("MainWindow: Actions initialized.");
 }
 
 void ui::MainWindow::setupMenuBar()
@@ -35,6 +52,11 @@ void ui::MainWindow::setupMenuBar()
   _openAction = new QAction("Open", this);
   _saveAction = new QAction("Save", this);
   _exitAction = new QAction("Exit", this);
+
+  // add shortcuts
+  _openAction->setShortcut(QKeySequence::Open);
+  _saveAction->setShortcut(QKeySequence::Save);
+  _exitAction->setShortcut(QKeySequence::Quit);
 
   connect(_openAction, &QAction::triggered, this, &MainWindow::fileOpen);
   connect(_saveAction, &QAction::triggered, this, &MainWindow::fileSave);
@@ -80,4 +102,23 @@ void ui::MainWindow::fileSave()
       Logging::Log("MainWindow: File saved successfully.");
     }
   }
+}
+
+void ui::MainWindow::applyBoldFormatter()
+{
+  std::shared_ptr<ITextFormatter> formatter = std::make_shared<BoldFormatter>();
+
+  QString text = _textEdit->toPlainText();
+  QString formattedText = formatter->format(text);
+  _textEdit->setPlainText(formattedText);
+  Logging::Log("MainWindow: Bold formatter applied.");
+}
+
+void ui::MainWindow::applyItalicFormatter()
+{
+  std::shared_ptr<ITextFormatter> formatter = std::make_shared<ItalicFormatter>();
+  QString text = _textEdit->toPlainText();
+  QString formattedText = formatter->format(text);
+  _textEdit->setPlainText(formattedText);
+  Logging::Log("MainWindow: Italic formatter applied.");
 }

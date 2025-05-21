@@ -16,6 +16,10 @@
 
 #include "Logging.hpp"
 
+#include "text_formatter/BoldFormatter.hpp"
+#include "text_formatter/ItalicFormatter.hpp"
+#include "text_formatter/UnderlineFormatter.hpp"
+
 namespace ui {
   class MainWindow : public QWidget
   {
@@ -40,12 +44,19 @@ namespace ui {
       void fileOpen();
       void fileSave();
 
+      void applyBoldFormatter();
+      void applyItalicFormatter();
+
       QTextEdit *_textEdit;
       QMenuBar *_menuBar;
       QMenu *_fileMenu;
       QAction *_openAction;
       QAction *_saveAction;
       QAction *_exitAction;
+
+      QAction *_boldAction;
+      QAction *_italicAction;
+      QAction *_underlineAction;
 
   };
 }
