@@ -7,6 +7,12 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QTextEdit>
+#include <QMenu>
+#include <QMenuBar>
+#include <QString>
+#include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 
 #include "Logging.hpp"
 
@@ -28,7 +34,11 @@ namespace ui {
       void setupMenuBar();
       void setupToolBar();
 
+      void fileOpen();
+      void fileSave();
+
       QTextEdit *_textEdit;
+      QMenuBar *_menuBar;
 
   };
 }
