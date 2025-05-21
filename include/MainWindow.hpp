@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <string>
+#include <stdbool.h>
 
 #include <QObject>
 #include <QWidget>
@@ -13,12 +15,14 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QTextCursor>
 
 #include "Logging.hpp"
 
 #include "text_formatter/BoldFormatter.hpp"
 #include "text_formatter/ItalicFormatter.hpp"
 #include "text_formatter/UnderlineFormatter.hpp"
+#include "text_formatter/PlainFormatter.hpp"
 
 namespace ui {
   class MainWindow : public QWidget
@@ -44,8 +48,10 @@ namespace ui {
       void fileOpen();
       void fileSave();
 
+      void resetTextFormat();
       void applyBoldFormatter();
       void applyItalicFormatter();
+      void applyUnderlineFormatter();
 
       QTextEdit *_textEdit;
       QMenuBar *_menuBar;
@@ -57,6 +63,10 @@ namespace ui {
       QAction *_boldAction;
       QAction *_italicAction;
       QAction *_underlineAction;
+
+      bool _isBold;
+      bool _isItalic;
+      bool _isUnderline;
 
   };
 }
