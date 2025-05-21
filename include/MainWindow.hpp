@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <qobjectdefs.h>
+#include <QTextEdit>
 
 namespace ui {
   class MainWindow : public QWidget
@@ -23,6 +23,8 @@ namespace ui {
       void setupActions();
       void setupMenuBar();
       void setupToolBar();
+
+      QTextEdit *_textEdit;
 
   };
 }

@@ -1,43 +1,41 @@
 #include "MainWindow.hpp"
 
+
 ui::MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
-    // Create a button
-    QPushButton *button = new QPushButton("Click Me", this);
-    connect(button, &QPushButton::clicked, this, &ui::MainWindow::sayHello);
+    _textEdit = new QTextEdit(this); // Create the text editor
 
-    // Set the layout
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(button);
+    layout->addWidget(_textEdit);
     setLayout(layout);
 
-    // Setup the UI components
     setupUi();
-}
+    setupActions();
+    setupMenuBar();
+    setupToolBar();
 
+}
 
 void ui::MainWindow::setupUi()
 {
-    // Set the window title
     setWindowTitle("Text Editor");
-    // Set the window size
     resize(800, 600);
 }
 
 void ui::MainWindow::setupActions()
 {
-  std::cout << "Setting up actions..." << std::endl;
+    std::cout << "Setting up actions..." << std::endl;
 }
 
 void ui::MainWindow::setupMenuBar()
 {
-  std::cout << "Setting up menu bar..." << std::endl;
+    std::cout << "Setting up menu bar..." << std::endl;
 }
 
 void ui::MainWindow::setupToolBar()
 {
-  std::cout << "Setting up toolbar..." << std::endl;
+    std::cout << "Setting up toolbar..." << std::endl;
 }
 
 void ui::MainWindow::sayHello()
