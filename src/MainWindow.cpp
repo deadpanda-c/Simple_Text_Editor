@@ -3,18 +3,21 @@
 ui::MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
 {
-    _textEdit = new QTextEdit(this); // Create the text editor
-    _menuBar = new QMenuBar(this); // Create the menu bar
+  _isBold = false; // Initialize the bold state
+  _isItalic = false; // Initialize the italic state
+  _isUnderline = false; // Initialize the underline state
+  _textEdit = new QTextEdit(this); // Create the text editor
+  _menuBar = new QMenuBar(this); // Create the menu bar
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->addWidget(_menuBar);
-    layout->addWidget(_textEdit);
-    setLayout(layout);
+  QVBoxLayout *layout = new QVBoxLayout(this);
+  layout->addWidget(_menuBar);
+  layout->addWidget(_textEdit);
+  setLayout(layout);
 
-    setupUi();
-    setupActions();
-    setupMenuBar();
-    setupToolBar();
+  setupUi();
+  setupActions();
+  setupMenuBar();
+  setupToolBar();
 }
 
 void ui::MainWindow::setupUi()
@@ -35,14 +38,34 @@ void ui::MainWindow::setupActions()
   _italicAction->setShortcut(QKeySequence("Ctrl+I"));
   _underlineAction->setShortcut(QKeySequence("Ctrl+U"));
 
-  connect(_boldAction, &QAction::triggered, this, &MainWindow::applyBoldFormatter);
+  connect(_boldAction, &QAction::triggered, this, [this]() {
+    if (_isBold) {
+      resetTextFormat();
+    } else {
+      applyBoldFormatter();
+    }
+  });
 
-  connect(_italicAction, &QAction::triggered, this, &MainWindow::applyItalicFormatter);
-  // connect(_underlineAction, &QAction::triggered, this, &MainWindow::applyUnderlineFormatter);
+  connect(_italicAction, &QAction::triggered, this, [this]() {
+    if (_isItalic) {
+      resetTextFormat();
+    } else {
+      applyItalicFormatter();
+    }
+  });
+
+  connect(_underlineAction, &QAction::triggered, this, [this]() {
+    if (_isUnderline) {
+      resetTextFormat();
+    } else {
+      applyUnderlineFormatter();
+    }
+  });
 
   // Add actions to the menu bare
   _menuBar->addAction(_boldAction);
   _menuBar->addAction(_italicAction);
+  _menuBar->addAction(_underlineAction);
   Logging::Log("MainWindow: Actions initialized.");
 }
 
@@ -104,21 +127,73 @@ void ui::MainWindow::fileSave()
   }
 }
 
+void ui::MainWindow::resetTextFormat() {
+  QTextCursor cursor = _textEdit->textCursor();
+  QTextCharFormat format;
+
+  if (!cursor.hasSelection()) return;
+
+  format.setFontWeight(QFont::Normal);
+  format.setFontItalic(false);
+  format.setFontUnderline(false);
+  cursor.mergeCharFormat(format);
+
+  _isBold = false;
+  _isItalic = false;
+  _isUnderline = false;
+  Logging::Log("MainWindow: Text format reset.");
+}
+
 void ui::MainWindow::applyBoldFormatter()
 {
-  std::shared_ptr<ITextFormatter> formatter = std::make_shared<BoldFormatter>();
+  QTextCursor cursor = _textEdit->textCursor();
+  BoldFormatter formatter;
 
-  QString text = _textEdit->toPlainText();
-  QString formattedText = formatter->format(text);
-  _textEdit->setPlainText(formattedText);
+
+  if (!cursor.hasSelection()) return;
+
+  QString selectedText = cursor.selectedText();
+
+  QString formattedText = formatter.format(selectedText);
+
+  cursor.insertHtml(formattedText);
+  _isBold = true;
   Logging::Log("MainWindow: Bold formatter applied.");
 }
 
 void ui::MainWindow::applyItalicFormatter()
 {
-  std::shared_ptr<ITextFormatter> formatter = std::make_shared<ItalicFormatter>();
-  QString text = _textEdit->toPlainText();
-  QString formattedText = formatter->format(text);
-  _textEdit->setPlainText(formattedText);
+  QTextCursor cursor = _textEdit->textCursor();
+  ItalicFormatter formatter;
+
+
+  if (!cursor.hasSelection()) return;
+
+  QString selectedText = cursor.selectedText();
+
+  QString formattedText = formatter.format(selectedText);
+  _isItalic = true;
+
+  cursor.insertHtml(formattedText);
   Logging::Log("MainWindow: Italic formatter applied.");
+}
+
+void ui::MainWindow::applyUnderlineFormatter()
+{
+  QTextCursor cursor = _textEdit->textCursor();
+  UnderlineFormatter formatter;
+
+  if (!cursor.hasSelection()) return;
+
+  QString selectedText = cursor.selectedText();
+
+  QString formattedText = formatter.format(selectedText);
+
+  _isUnderline = true;
+  cursor.insertHtml(formattedText);
+
+  // replace the content of the text edit with the formatted text
+  _textEdit->setTextCursor(cursor);
+
+  Logging::Log("MainWindow: Underline formatter applied.");
 }
